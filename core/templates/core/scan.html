@@ -6,32 +6,118 @@
 
     <section class="card">
         <h2>Scan QR Code Tanaman</h2>
-        <p>Arahkan kamera HP ke QR Code pada buku FloraLens.</p>
-        
-        <div id="reader" style="max-width: 420px; margin: 0 auto;"></div>
-        
+        <p>Arahkan kamera belakang HP ke QR Code pada buku FloraLens, atau upload foto QR dari galeri.</p>
+
+        <label>Pilih Kamera</label>
+        <select id="camera-select"></select>
+
+        <div id="reader" style="max-width:420px; margin:20px auto;"></div>
+
+        <hr>
+
+        <h3>Upload Foto QR</h3>
+        <input type="file" id="qr-input-file" accept="image/*">
+
         <p id="scan-result" class="alert">Hasil scan akan muncul di sini.</p>
     </section>
 </main>
 
 <script>
+    const html5QrCode = new Html5Qrcode("reader");
+    const cameraSelect = document.getElementById("camera-select");
+    const fileInput = document.getElementById("qr-input-file");
+
+    function redirectToResult(decodedText) {
+        document.getElementById("scan-result").innerText =
+            "QR berhasil dibaca: " + decodedText;
+
+        if (decodedText.startsWith("http")) {
+            window.location.href = decodedText;
+        } else {
+            document.getElementById("scan-result").innerText =
+                "QR berhasil dibaca, tetapi isinya bukan URL: " + decodedText;
+        }
+    }
+
     function onScanSuccess(decodedText) {
-        document.getElementById('scan-result').innerText = 'QR berhasil dibaca: ' + decodedText;
-        // Mengalihkan halaman siswa ke URL hasil scan (detail tanaman)
-        window.location.href = decodedText;
+        html5QrCode.stop().then(() => {
+            redirectToResult(decodedText);
+        }).catch(() => {
+            redirectToResult(decodedText);
+        });
     }
 
-    function onScanFailure(error) {
-        // Handle error scan secara silent (atau abaikan seperti kode asli)
+    function startCamera(cameraId) {
+        html5QrCode.start(
+            cameraId,
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            onScanSuccess
+        ).catch(err => {
+            document.getElementById("scan-result").innerText =
+                "Kamera gagal dibuka: " + err;
+        });
     }
 
-    // Inisialisasi Scanner
-    const scanner = new Html5QrcodeScanner('reader', { 
-        fps: 10, 
-        qrbox: 250 
+    Html5Qrcode.getCameras().then(devices => {
+        if (devices && devices.length) {
+            let selectedCameraId = devices[0].id;
+
+            cameraSelect.innerHTML = "";
+
+            devices.forEach((device, index) => {
+                const option = document.createElement("option");
+                option.value = device.id;
+                option.text = device.label || `Kamera ${index + 1}`;
+
+                const label = option.text.toLowerCase();
+
+                if (
+                    label.includes("back") ||
+                    label.includes("rear") ||
+                    label.includes("environment") ||
+                    label.includes("belakang")
+                ) {
+                    selectedCameraId = device.id;
+                    option.selected = true;
+                }
+
+                cameraSelect.appendChild(option);
+            });
+
+            startCamera(selectedCameraId);
+
+            cameraSelect.addEventListener("change", function () {
+                html5QrCode.stop().then(() => {
+                    startCamera(this.value);
+                });
+            });
+        } else {
+            document.getElementById("scan-result").innerText =
+                "Kamera tidak ditemukan. Silakan upload foto QR.";
+        }
+    }).catch(err => {
+        document.getElementById("scan-result").innerText =
+            "Tidak bisa mengakses kamera. Silakan upload foto QR.";
     });
-    
-    // Jalankan Scanner pada elemen #reader
-    scanner.render(onScanSuccess, onScanFailure);
+
+    fileInput.addEventListener("change", function () {
+        if (this.files.length === 0) {
+            return;
+        }
+
+        const imageFile = this.files[0];
+
+        html5QrCode.scanFile(imageFile, true)
+            .then(decodedText => {
+                redirectToResult(decodedText);
+            })
+            .catch(err => {
+                document.getElementById("scan-result").innerText =
+                    "QR tidak terbaca dari foto. Pastikan foto jelas dan QR tidak blur.";
+            });
+    });
 </script>
 {% endblock %}
