@@ -1,0 +1,161 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<main class="container">
+    <h2>Dashboard Guru</h2>
+    
+    <div class="alert">
+        Guru dapat mengelola tanaman, kuis, QR Code, dan melihat nilai kuis siswa.
+    </div>
+
+    <section class="card">
+        <h3>Menu Guru</h3>
+        <div class="action-group">
+            <a class="btn" href="{% url 'plant_add' %}">+ Tambah Tanaman</a>
+            <a class="btn" href="#data-tanaman">Kelola Tanaman</a>
+            <a class="btn" href="#nilai-siswa">Kuis Siswa</a>
+        </div>
+    </section>
+
+       <section class="grid">
+    <div class="card">
+        <h3>{{ total_tanaman }}</h3>
+        <p>Total Tanaman</p>
+    </div>
+
+    <div class="card">
+        <h3>{{ total_kuis }}</h3>
+        <p>Total Kuis</p>
+    </div>
+
+    <div class="card">
+        <h3>{{ total_siswa }}</h3>
+        <p>Total Siswa</p>
+    </div>
+
+    <div class="card">
+        <h3>{{ rata_nilai }}%</h3>
+        <p>Rata-rata Nilai</p>
+    </div>
+</section>
+
+    <section class="card">
+        <h3>QR Code Buku FloraLens</h3>
+        <div class="grid">
+            {% for item in plant_qr %}
+                <div class="card">
+                    <h4>{{ item.plant.name }}</h4>
+                    <img id="qr{{ item.plant.id }}"
+                    class="qr-img"
+                    src="data:image/png;base64,{{ item.qr }}"
+                    alt="QR {{ item.plant.name }}">
+                    <br><br>
+                    <a class="btn-small"
+                    download="{{ item.plant.name }}_QR.png"
+                    href="data:image/png;base64,{{ item.qr }}">
+                    Download QR </a>
+                    <p><small>{{ item.url }}</small></p>
+                </div>
+            {% empty %}
+                <p>Belum ada tanaman.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="card" id="data-tanaman">
+        <h3>Data Tanaman & Kuis</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Nama Ilmiah</th>
+                    <th>Jumlah Kuis</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plant in plants %}
+                    <tr>
+                        <td>{{ plant.name }}</td>
+                        <td><em>{{ plant.scientific_name }}</em></td>
+                        <td><span class="badge">{{ plant.quizzes.count }} kuis</span></td>
+                        <td>
+                            <div class="action-group">
+                                <a class="btn-small" href="{% url 'plant_detail' plant.code %}">Detail</a>
+                                <a class="btn-warning" href="{% url 'plant_edit' plant.id %}">Edit</a>
+                                <a class="btn-small" href="{% url 'quiz_manage' plant.id %}">Kelola Kuis</a>
+                                <a class="btn-danger-small" href="{% url 'plant_delete' plant.id %}">Hapus</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align: center;">Belum ada data tanaman.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="card">
+    <h3>Peringkat Siswa</h3>
+
+    <table>
+        <tr>
+            <th>Rank</th>
+            <th>Nama</th>
+            <th>Total Nilai</th>
+        </tr>
+
+        {% for siswa in leaderboard %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ siswa.nama }}</td>
+            <td>{{ siswa.total }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">Belum ada data peringkat.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+
+    <section class="card" id="nilai-siswa">
+        <h3>Nilai Kuis Siswa</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Siswa</th>
+                    <th>Tanaman</th>
+                    <th>Skor</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                    <tr>
+                        <td>{{ score.user.first_name|default:score.user.username }}</td>
+                        <td>{{ score.plant.name }}</td>
+                        <td><strong>{{ score.score }}</strong></td>
+                        <td>{{ score.created_at|date:'d M Y H:i' }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'score_delete' score.id %}" style="margin: 0;">
+                                {% csrf_token %}
+                                <button class="btn-danger-small" type="submit" onclick="return confirm('Hapus nilai ini?')">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center;">Belum ada nilai kuis.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+{% endblock %}

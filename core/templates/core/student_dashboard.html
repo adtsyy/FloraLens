@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<main class="container">
+    <h2>Dashboard Siswa</h2>
+    
+    <div class="alert">
+        Silakan scan QR Code pada buku FloraLens untuk membuka materi tanaman dan mengerjakan kuis.
+    </div>
+
+    <section class="card">
+        <h3>Mulai Pembelajaran</h3>
+        <p>Arahkan kamera HP ke QR Code yang ada di buku FloraLens.</p>
+        <a class="btn" href="{% url 'scan_qr' %}">📷 Scan QR Tanaman</a>
+    </section>
+
+    <section class="card">
+        <h3>Riwayat Kuis Saya</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanaman</th>
+                    <th>Skor</th>
+                    <th>Tanggal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                    <tr>
+                        <td>{{ score.plant.name }}</td>
+                        <td><strong>{{ score.score }}</strong></td>
+                        <td>{{ score.created_at|date:'d M Y H:i' }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Belum ada nilai kuis.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+{% endblock %}

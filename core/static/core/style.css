@@ -1,0 +1,348 @@
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4fbf5;
+    color:#1f3d2b;
+}
+
+/* NAVBAR */
+.navbar{
+    background:#1f7a3f;
+    color:#fff;
+    padding:16px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.brand{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.navbar nav{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.navbar a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* Logout Button */
+.navbar form{
+    margin:0;
+    padding:0;
+}
+
+.navbar form button{
+    background:none;
+    border:none;
+    color:white;
+    font-weight:bold;
+    font-size:16px;
+    font-family:inherit;
+    cursor:pointer;
+    padding:0;
+}
+
+.navbar form button:hover,
+.navbar a:hover{
+    opacity:0.8;
+}
+
+/* CONTAINER */
+.container{
+    padding:35px 7%;
+}
+
+.message-container{
+    padding-bottom:0;
+}
+
+/* HERO */
+.hero{
+    padding:70px 7%;
+    background:linear-gradient(135deg,#d8f5df,#fff);
+}
+
+.hero h1{
+    font-size:42px;
+    margin:0 0 12px;
+}
+
+.hero p{
+    max-width:760px;
+    font-size:18px;
+    line-height:1.6;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+}
+
+/* CARD */
+.card{
+    background:white;
+    padding:22px;
+    border-radius:16px;
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
+    margin-bottom:22px;
+}
+
+/* FOTO TANAMAN DI BERANDA */
+.plant-img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:12px;
+    display:block;
+}
+
+/* FOTO DETAIL TANAMAN */
+.detail-img{
+    width:100%;
+    max-width:500px;
+    height:350px;
+    object-fit:cover;
+    border-radius:14px;
+    display:block;
+    margin:0 auto 20px auto;
+}
+
+.detail-card{
+    max-width:1000px;
+    margin:auto;
+    margin-bottom:22px;
+}
+
+/* BUTTON */
+.btn{
+    display:inline-block;
+    background:#1f7a3f;
+    color:#fff;
+    border:none;
+    padding:11px 18px;
+    border-radius:10px;
+    text-decoration:none;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.btn:hover{
+    background:#145c2e;
+}
+
+.danger{
+    background:#b52222;
+    color:white;
+    border:none;
+    padding:11px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+/* FORM */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="file"],
+textarea,
+select{
+    width:100%;
+    padding:11px;
+    margin:8px 0 16px;
+    border:1px solid #b7ccb9;
+    border-radius:8px;
+}
+
+input[type="radio"]{
+    width:auto;
+    margin-right:8px;
+    vertical-align:middle;
+}
+
+textarea{
+    min-height:110px;
+}
+
+.quiz-option{
+    margin:15px 0;
+}
+
+.quiz-option label{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    font-size:18px;
+    line-height:1.6;
+}
+
+input[type="radio"]{
+    width:auto;
+    margin:0;
+    transform:scale(1.2);
+}
+
+.quiz-question{
+    margin-bottom:20px;
+    font-size:22px;
+}
+
+/* TABLE */
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th,
+td{
+    padding:12px;
+    border:1px solid #d3e6d7;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:#d8f5df;
+}
+
+/* ALERT */
+.alert{
+    padding:12px;
+    border-radius:10px;
+    background:#e8f7ec;
+    border-left:5px solid #1f7a3f;
+    margin-bottom:16px;
+}
+
+.error{
+    padding:12px;
+    border-radius:10px;
+    background:#ffe8e8;
+    border-left:5px solid #b52222;
+    margin-bottom:16px;
+}
+
+/* QR */
+.qr-img{
+    width:160px !important;
+    height:160px !important;
+    object-fit:contain !important;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:20px;
+    background:#1f7a3f;
+    color:white;
+    margin-top:40px;
+}
+
+/* AUTH */
+.auth-box{
+    max-width:430px;
+    margin:40px auto;
+}
+
+/* ACTION BUTTON */
+.action-group{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.btn-small{
+    display:inline-block;
+    background:#1f7a3f;
+    color:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    text-decoration:none;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.btn-warning{
+    display:inline-block;
+    background:#d99000;
+    color:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    text-decoration:none;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.btn-danger-small{
+    display:inline-block;
+    background:#b52222;
+    color:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    text-decoration:none;
+    cursor:pointer;
+    font-size:14px;
+}
+
+/* BADGE */
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:999px;
+    background:#d8f5df;
+    color:#1f7a3f;
+    font-weight:bold;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+
+    .navbar{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .navbar nav{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .container{
+        padding:25px 5%;
+    }
+
+    .hero{
+        padding:50px 5%;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    .plant-img{
+        height:180px;
+    }
+
+    .detail-img{
+        width:100%;
+        height:250px;
+    }
+}

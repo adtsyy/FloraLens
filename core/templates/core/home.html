@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <h1>FloraLens</h1>
+    <p>Buku interaktif berbasis QR Code dan website untuk pembelajaran Biologi. Siswa dapat scan kode pada buku, membaca informasi tanaman, dan mengerjakan kuis.</p>
+    
+    {% if not user.is_authenticated %}
+        <a class="btn" href="{% url 'login' %}">Login</a>
+    {% endif %}
+</section>
+
+<!-- Main Content: Daftar Tanaman -->
+<main class="container">
+    <h2>Daftar Tanaman</h2>
+    
+    <div class="grid">
+        {% for plant in plants %}
+            <div class="card">
+                <!-- Foto Tanaman -->
+                {% if plant.photo %}
+                    <img class="plant-img" src="{{ plant.photo.url }}" alt="{{ plant.name }}">
+                {% else %}
+                    <div class="alert">Foto belum tersedia.</div>
+                {% endif %}
+                
+                <!-- Informasi Singkat -->
+                <h3>{{ plant.name }}</h3>
+                <p><em>{{ plant.scientific_name }}</em></p>
+                <p>{{ plant.characteristics|truncatechars:100 }}</p>
+                
+                <a class="btn" href="{% url 'plant_detail' plant.code %}">Lihat Detail</a>
+            </div>
+        {% empty %}
+            <!-- State jika data kosong -->
+            <div class="card">Belum ada data tanaman.</div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

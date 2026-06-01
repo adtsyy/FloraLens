@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<main class="container">
+    <a class="btn" href="{% url 'student_dashboard' %}">← Kembali ke Dashboard Siswa</a>
+
+    <section class="card">
+        <h2>Scan QR Code Tanaman</h2>
+        <p>Arahkan kamera HP ke QR Code pada buku FloraLens.</p>
+        
+        <div id="reader" style="max-width: 420px; margin: 0 auto;"></div>
+        
+        <p id="scan-result" class="alert">Hasil scan akan muncul di sini.</p>
+    </section>
+</main>
+
+<script>
+    function onScanSuccess(decodedText) {
+        document.getElementById('scan-result').innerText = 'QR berhasil dibaca: ' + decodedText;
+        // Mengalihkan halaman siswa ke URL hasil scan (detail tanaman)
+        window.location.href = decodedText;
+    }
+
+    function onScanFailure(error) {
+        // Handle error scan secara silent (atau abaikan seperti kode asli)
+    }
+
+    // Inisialisasi Scanner
+    const scanner = new Html5QrcodeScanner('reader', { 
+        fps: 10, 
+        qrbox: 250 
+    });
+    
+    // Jalankan Scanner pada elemen #reader
+    scanner.render(onScanSuccess, onScanFailure);
+</script>
+{% endblock %}

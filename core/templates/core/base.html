@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloraLens</title>
+
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+
+    <!-- Library Scan QR -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="brand">🌿 FloraLens</div>
+
+    <nav>
+
+{% if user.is_authenticated %}
+
+    {% if user.profile.role == 'guru' %}
+
+        <a href="{% url 'home' %}">Beranda</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+
+    {% elif user.profile.role == 'siswa' %}
+
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'scan_qr' %}">Scan QR</a>
+
+    {% endif %}
+
+    <a href="{% url 'logout' %}">Logout</a>
+
+{% else %}
+
+    <a href="{% url 'home' %}">Beranda</a>
+    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'register' %}">Register</a>
+
+{% endif %}
+
+</nav>
+</header>
+
+{% if messages %}
+<main class="container message-container">
+    {% for message in messages %}
+        <div class="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+</main>
+{% endif %}
+
+{% block content %}
+{% endblock %}
+
+<footer>
+    © 2026 FloraLens
+</footer>
+
+</body>
+</html>

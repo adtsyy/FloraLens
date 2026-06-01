@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<main class="container">
+    <div class="card auth-box">
+        <h2>Login</h2>
+        
+        <!-- Form Login -->
+        <form method="POST">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            
+            <button class="btn" type="submit">Login</button>
+        </form>
+        
+        <!-- Link Navigasi -->
+        <p>Belum punya akun? <a href="{% url 'register' %}">Register</a></p>
+    </div>
+</main>
+{% endblock %}

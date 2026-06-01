@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<main class="container">
+    <a class="btn" href="{% url 'teacher_dashboard' %}">← Kembali ke Dashboard Guru</a>
+
+    <section class="card">
+        <h2>Kelola Kuis: {{ plant.name }}</h2>
+        <p><em>{{ plant.scientific_name }}</em></p>
+        <a class="btn" href="{% url 'quiz_add' plant.id %}">+ Tambah Kuis</a>
+    </section>
+
+    <section class="card">
+        <h3>Daftar Kuis</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pertanyaan</th>
+                    <th>Pilihan</th>
+                    <th>Jawaban Benar</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.question }}</td>
+                        <td>
+                            A. {{ quiz.option_a }}<br>
+                            B. {{ quiz.option_b }}<br>
+                            C. {{ quiz.option_c }}<br>
+                            D. {{ quiz.option_d }}
+                        </td>
+                        <td><strong>{{ quiz.correct_answer }}</strong></td>
+                        <td>
+                            <div class="action-group">
+                                <a class="btn-warning" href="{% url 'quiz_edit' quiz.id %}">Edit</a>
+                                <a class="btn-danger-small" href="{% url 'quiz_delete' quiz.id %}">Hapus</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align: center;">Belum ada kuis.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+{% endblock %}

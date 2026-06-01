@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<main class="container">
+    <div class="card auth-box">
+        <h2>Register</h2>
+        
+        <!-- Form Registrasi -->
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Render Field Form Django -->
+            {{ form.as_p }}
+            
+            <button class="btn" type="submit">Daftar</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

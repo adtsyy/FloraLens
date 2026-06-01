@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<main class="container">
+    {% if user.profile.role == 'siswa' %}
+        <a class="btn" href="{% url 'student_dashboard' %}">← Kembali ke Dashboard Siswa</a>
+    {% else %}
+        <a class="btn" href="{% url 'teacher_dashboard' %}">← Kembali ke Dashboard Guru</a>
+    {% endif %}
+
+    <section class="card detail-card">
+        {% if plant.photo %}
+            <img class="detail-img" src="{{ plant.photo.url }}" alt="{{ plant.name }}">
+        {% else %}
+            <div class="alert">Foto tanaman belum tersedia.</div>
+        {% endif %}
+
+        <h1>{{ plant.name }}</h1>
+        <p><strong>Nama Ilmiah:</strong> <em>{{ plant.scientific_name }}</em></p>
+        <p><strong>Famili:</strong> {{ plant.family }}</p>
+        <p><strong>Habitat:</strong> {{ plant.habitat }}</p>
+        <p><strong>Ciri-ciri:</strong> {{ plant.characteristics }}</p>
+        <p><strong>Manfaat:</strong> {{ plant.benefits }}</p>
+    </section>
+
+    {% if user.profile.role == 'siswa' %}
+        <section class="card detail-card">
+            <h2>Kuis Pembelajaran</h2>
+            
+            {% if quizzes %}
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {% for quiz in quizzes %}
+                        <div class="quiz-item">
+                            <p class="quiz-question">
+                            <strong>{{ forloop.counter }}. {{ quiz.question }}</strong>
+                        </p>
+                        <div class="quiz-option">
+                            <label>
+                                <input type="radio" name="quiz_{{ quiz.id }}" value="A" required>
+                                A. {{ quiz.option_a }}
+                            </label>
+                        </div>
+
+                        <div class="quiz-option">
+                            <label>
+                                <input type="radio" name="quiz_{{ quiz.id }}" value="B">
+                                B. {{ quiz.option_b }}
+                            </label>
+                        </div>
+
+                        <div class="quiz-option">
+                            <label>
+                                <input type="radio" name="quiz_{{ quiz.id }}" value="C">
+                                C. {{ quiz.option_c }}
+                            </label>
+                        </div>
+
+                        <div class="quiz-option">
+                            <label>
+                                <input type="radio" name="quiz_{{ quiz.id }}" value="D">
+                                D. {{ quiz.option_d }}
+                            </label>
+                        </div>
+                        <br>
+                    {% endfor %}
+                    
+                    <button class="btn" type="submit">Kirim Kuis</button>
+                </form>
+            {% else %}
+                <p>Belum ada kuis untuk tanaman ini.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+</main>
+{% endblock %}
